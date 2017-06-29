@@ -12,16 +12,20 @@ body {
   background-image: -webkit-gradient(linear, right top, left top, from(rgba(169, 107, 214, 0.2)), color-stop(#a96bd6), to(rgba(169, 107, 214, 0.2)));
   background-image: linear-gradient(to left, rgba(169, 107, 214, 0.2), #a96bd6, rgba(169, 107, 214, 0.2)); }
 
+a {
+  text-decoration: none; }
+
 header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   padding: 30px 50px; }
   header .header-title {
-    margin-right: 100px;
     color: #fff;
     text-transform: uppercase;
     font-size: 18px;
@@ -29,7 +33,6 @@ header {
     letter-spacing: 3px; }
   header .main-nav a {
     color: #fff;
-    text-decoration: none;
     text-transform: uppercase;
     margin-left: 20px;
     -webkit-transition: all 0.15s ease-in-out;
@@ -38,6 +41,28 @@ header {
       margin: 0; }
     header .main-nav a:hover {
       color: #b465ed; }
+  header form {
+    -ms-flex-preferred-size: 250px;
+        flex-basis: 250px; }
+    header form input[type="text"] {
+      width: 100%;
+      background: rgba(169, 107, 214, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 5px;
+      color: white;
+      -webkit-transition: -webkit-box-shadow 0.15s ease-in-out;
+      transition: -webkit-box-shadow 0.15s ease-in-out;
+      transition: box-shadow 0.15s ease-in-out;
+      transition: box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out; }
+      header form input[type="text"]::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px; }
+      header form input[type="text"]:-ms-input-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px; }
+      header form input[type="text"]::placeholder {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px; }
 
 .container {
   padding: 50px 0; }
@@ -48,9 +73,6 @@ header {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap; }
     .container .wrapper .box {
@@ -63,7 +85,8 @@ header {
       -webkit-transition: all 0.2s ease-in-out;
       transition: all 0.2s ease-in-out;
       opacity: 0.5;
-      cursor: pointer; }
+      cursor: pointer;
+      position: relative; }
       .container .wrapper .box:hover {
         -webkit-transform: scale(1.1);
                 transform: scale(1.1);
@@ -99,9 +122,19 @@ header {
         background: rgba(12, 12, 12, 0.5); }
       .container .wrapper .box .game {
         border-radius: 3px; }
+      .container .wrapper .box .info {
+        font-size: 14px; }
       .container .wrapper .box img {
         max-width: 100%;
         height: auto; }
+      .container .wrapper .box .delete-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #0c0c0c;
+        border: none;
+        font-size: 18px;
+        color: #d82929; }
 
 @media (max-width: 630px) {
   header {
@@ -112,5 +145,13 @@ header {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center; }
+    header form {
+      -ms-flex-preferred-size: auto;
+          flex-basis: auto;
+      margin-top: 20px; }
     header .header-title {
-      margin-right: 0; } }
+      margin-right: 0; }
+  .wrapper {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; } }

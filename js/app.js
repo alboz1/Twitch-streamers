@@ -1,16 +1,22 @@
 const app = {
-	streamers: ['freecodecamp','grossie_gore','tsm_bjergsen','Tsm_Dyrus','summit1g','pobelter','asd'],
+	streamers: ['freecodecamp', 'tsm_dyrus', 'tsm_bjergsen', 'donthedeveloper'],
 	online: false,
 
 	init() {
-		this.streamers.forEach(streamer => {
-			this.onlineInfo(streamer);
-		});
-		this.eventListeners();
+		if (this.streamers.length === 0) {
+			$('.wrapper').text('No streamers added').css('color', 'white');
+		} else {
+			$('.wrapper').text('');
+			$('.wrapper').html('');
+			this.streamers.forEach(streamer => {
+				this.onlineInfo(streamer);
+			});
+		}
+
 	},
 
 	eventListeners() {
-		$('a').on('click', function(e) {
+		$('.main-nav a').on('click', function(e) {
 			e.preventDefault();
 			const $this = $(this);
 
@@ -24,12 +30,34 @@ const app = {
 				$('.box').show();
 			}
 		});
+
+		$('form').on('submit', e => {
+			e.preventDefault();
+			const streamer = $(':text').val().replace(' ', '');
+			if (streamer === '') return;
+
+			this.addStreamer(streamer);
+			this.init();
+		});
+
+		$('.wrapper').on('click','a button', function(e) {
+			e.preventDefault();
+			const streamer = $(this).prev().text().toLowerCase();
+			const index = app.streamers.indexOf(streamer);
+			app.streamers.splice(index, 1);
+			app.init();
+		});
+	},
+
+	addStreamer(streamer) {
+		this.streamers.push(streamer);
 	},
 
 	getData(url, cb) {
 		$.ajax({
 			url: url,
 			dataType: 'jsonp',
+			cache: false,
 			success: data => {
 				cb(data);
 			},
@@ -74,20 +102,21 @@ const app = {
 	},
 
 	render(props) {
+		//props.error === 422 && props.error === 400 checks if the account exists or not.
 		$('.wrapper').append(`
-			<div class="box" ${props.error === 422 ? 'style="background: white"' : `style="background: url('${props.logo}')"`}>
-				<span class="status-${props.status}">
-					${props.error === 422 ? 'Account doesn\'t exist' : props.status}
-				</span>
-				<p class="name">${props.error === 422 ? props.streamer : props.name}</p>
-				${(props.error === 422 || !this.online) ? '' : `<p class="game">${props.game}</p>`}
-				${(props.error === 422 || !this.online) ? '' : `<p class="info">${props.info}</p>`}
-			</div>
+			<a href="${props.url}" target="_blank">
+				<div class="box" ${props.error === 422 || props.error === 400 ? 'style="background: white"' : `style="background: url('${props.logo}')"`}>
+					<span class="status-${props.status}">
+						${props.error === 422 || props.error === 400 ? 'Account doesn\'t exist' : props.status}
+					</span>
+					<p class="name">${props.error === 422 || props.error === 400 ? props.streamer : props.name}</p>
+					${(props.error === 422 || !this.online || props.error === 400) ? '' : `<p class="game">${props.game}</p>`}
+					${(props.error === 422 || !this.online || props.error === 400) ? '' : `<p class="info">${props.info}</p>`}
+					<button class="delete-btn">&times;</button>
+				</div>
+			</a>
 		`);
-		
-		$('.box').on('click', function() {
-			window.open(props.url);
-		});
 	}
 }
 app.init();
+app.eventListeners();

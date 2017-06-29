@@ -13,12 +13,16 @@ body
 	border: 0
 	height: 1px
 	background-image: linear-gradient(to left, rgba(#a96bd6,.2), $light, rgba(#a96bd6,.2))
+a
+	text-decoration: none
+
 header
 	display: flex
+	justify-content: space-around
 	align-items: center
 	padding: 30px 50px
 	.header-title
-		margin-right: 100px
+		//margin-right: 100px
 		color: #fff
 		text-transform: uppercase
 		font-size: 18px
@@ -28,7 +32,6 @@ header
 	.main-nav
 		a
 			color: #fff
-			text-decoration: none
 			text-transform: uppercase
 			margin-left: 20px
 			transition: all 0.15s ease-in-out
@@ -36,7 +39,19 @@ header
 				margin: 0
 			&:hover
 				color: #b465ed
-	
+	form 
+		flex-basis: 250px
+		input[type="text"]
+			width: 100%
+			background: rgba($light, .2)
+			border: 1px solid rgba(white, .2)
+			padding: 8px 5px
+			color: white
+			transition: box-shadow 0.15s ease-in-out
+			&::placeholder
+				color: rgba(white, .9)
+				font-size: 14px
+		
 .container
 	padding: 50px 0
 
@@ -45,9 +60,9 @@ header
 		max-width: 100%
 		margin: 0 auto
 		display: flex
-		justify-content: center
+		//justify-content: center
 		flex-wrap: wrap
-	
+
 		.box
 			width: 300px
 			height: 250px
@@ -57,6 +72,7 @@ header
 			transition: all 0.2s ease-in-out
 			opacity: 0.5
 			cursor: pointer
+			position: relative
 			&:hover
 				transform: scale(1.1)
 				opacity: 1
@@ -92,21 +108,32 @@ header
 				background: rgba($dark, .5)
 			.game
 				@extend .name
-				//display: none
 				border-radius: 3px
 			.info
 				@extend .name
-				//display: none
+				font-size: 14px
 
 			img
 				max-width: 100%
 				height: auto
+			.delete-btn
+				position: absolute
+				top: 0
+				right: 0
+				background: $dark
+				border: none
+				font-size: 18px
+				color: #d82929
 
 @media (max-width: 630px)
 	header
 		flex-direction: column
 		justify-content: center
-
+		form
+			flex-basis: auto
+			margin-top: 20px
 		.header-title
 			margin-right: 0
+	.wrapper
+		justify-content: center
 	
