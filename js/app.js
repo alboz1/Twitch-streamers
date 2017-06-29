@@ -53,51 +53,45 @@ const app = {
 		this.streamers.push(streamer);
 	},
 
-	getData(url, cb) {
-		$.ajax({
-			url: url,
-			dataType: 'jsonp',
-			cache: false,
-			success: data => {
-				cb(data);
-			},
-			error: function(error) {
-				console.log(error);
-			}
-		});
-	},
-
 	onlineInfo(streamer) {
-		this.getData(`https://wind-bow.gomix.me/twitch-api/streams/${streamer}`, data => {
-			if (data.stream === null) {
-				this.offlineInfo(streamer);
-			} else {
-				this.online = true;
-				
-				this.render({
-					status: 'Online',
-					name: data.stream.channel.display_name, 
-					game: data.stream.channel.game,
-					info: data.stream.channel.status,
-					logo: data.stream.channel.logo,
-					url: data.stream.channel.url,
-				});
+		this.online = true;
+
+		$.ajax({
+			url: `https://wind-bow.gomix.me/twitch-api/streams/${streamer}`,
+			dataType: 'jsonp',
+			success: data => {
+				if (data.stream === null) {
+					this.offlineInfo(streamer);
+				} else {
+					this.render({
+						status: 'Online',
+						name: data.stream.channel.display_name, 
+						game: data.stream.channel.game,
+						info: data.stream.channel.status,
+						logo: data.stream.channel.logo,
+						url: data.stream.channel.url,
+					});
+				}
 			}
 		});
 	},
 
 	offlineInfo(streamer) {
-		this.getData(`https://wind-bow.gomix.me/twitch-api/channels/${streamer}`, data => {
-			this.online = false;
+		$.ajax({
+			url: `https://wind-bow.gomix.me/twitch-api/channels/${streamer}`,
+			dataType: 'jsonp',
+			success: data => {
+				this.online = false;
 
-			this.render({
-				status: 'Offline',
-				name: data.display_name,
-				logo: data.logo,
-				url: data.url,
-				error: data.status,
-				streamer: streamer
-			});
+				this.render({
+					status: 'Offline',
+					name: data.display_name,
+					logo: data.logo,
+					url: data.url,
+					error: data.status,
+					streamer: streamer
+				});
+			}
 		});
 	},
 
@@ -110,8 +104,8 @@ const app = {
 						${props.error === 422 || props.error === 400 ? 'Account doesn\'t exist' : props.status}
 					</span>
 					<p class="name">${props.error === 422 || props.error === 400 ? props.streamer : props.name}</p>
-					${(props.error === 422 || !this.online || props.error === 400) ? '' : `<p class="game">${props.game}</p>`}
-					${(props.error === 422 || !this.online || props.error === 400) ? '' : `<p class="info">${props.info}</p>`}
+					${props.error === 422 || !this.online || props.error === 400 ? '' : `<p class="game">${props.game}</p>`}
+					${props.error === 422 || !this.online || props.error === 400 ? '' : `<p class="info">${props.info}</p>`}
 					<button class="delete-btn">&times;</button>
 				</div>
 			</a>
