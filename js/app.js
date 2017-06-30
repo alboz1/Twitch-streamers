@@ -3,16 +3,10 @@ const app = {
 	online: false,
 
 	init() {
-		if (this.streamers.length === 0) {
-			$('.wrapper').text('No streamers added').css('color', 'white');
-		} else {
-			$('.wrapper').text('');
-			$('.wrapper').html('');
-			this.streamers.forEach(streamer => {
-				this.onlineInfo(streamer);
-			});
-		}
-
+		$('.wrapper').html('');
+		this.streamers.forEach(streamer => {
+			this.getData(streamer);
+		});
 	},
 
 	eventListeners() {
@@ -37,7 +31,7 @@ const app = {
 			if (streamer === '') return;
 
 			this.addStreamer(streamer);
-			this.init();
+			this.getData(streamer);
 		});
 
 		$('.wrapper').on('click','a button', function(e) {
@@ -53,7 +47,7 @@ const app = {
 		this.streamers.push(streamer);
 	},
 
-	onlineInfo(streamer) {
+	getData(streamer) {
 		this.online = true;
 
 		$.ajax({
@@ -95,17 +89,24 @@ const app = {
 		});
 	},
 
+	catchError(error) {
+		if (error === 422 || error === 400 || error === 404 || error === null) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+
 	render(props) {
-		//props.error === 422 && props.error === 400 checks if the account exists or not.
 		$('.wrapper').append(`
 			<a href="${props.url}" target="_blank">
-				<div class="box" ${props.error === 422 || props.error === 400 ? 'style="background: white"' : `style="background: url('${props.logo}')"`}>
+				<div class="box" ${this.catchError(props.error) ? 'style="background: white"' : `style="background: url('${props.logo}')"`}>
 					<span class="status-${props.status}">
-						${props.error === 422 || props.error === 400 ? 'Account doesn\'t exist' : props.status}
+						${this.catchError(props.error) ? 'Account doesn\'t exist' : props.status}
 					</span>
-					<p class="name">${props.error === 422 || props.error === 400 ? props.streamer : props.name}</p>
-					${props.error === 422 || !this.online || props.error === 400 ? '' : `<p class="game">${props.game}</p>`}
-					${props.error === 422 || !this.online || props.error === 400 ? '' : `<p class="info">${props.info}</p>`}
+					<p class="name">${this.catchError(props.error) ? props.streamer : props.name}</p>
+					${this.catchError(props.error) || !this.online ? '' : `<p class="game">${props.game}</p>`}
+					${this.catchError(props.error) || !this.online ? '' : `<p class="info">${props.info}</p>`}
 					<button class="delete-btn">&times;</button>
 				</div>
 			</a>
