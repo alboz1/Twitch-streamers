@@ -1,12 +1,10 @@
 const app = {
-	streamers: ['freecodecamp', 'tsm_dyrus', 'tsm_bjergsen', 'donthedeveloper'],
+	streamers: ['freecodecamp', 'tsm_dyrus', 'tsm_bjergsen', 'donthedeveloper', 'summit1g'],
 	online: false,
 
 	init() {
 		$('.wrapper').html('');
-		this.streamers.forEach(streamer => {
-			this.getData(streamer);
-		});
+		this.getData();
 	},
 
 	eventListeners() {
@@ -17,10 +15,10 @@ const app = {
 			if ($this.text() === 'Online') {
 				$('.box').show();
 				$('.status-Offline').parent().hide();
-			}else if ($this.text() === 'Offline') {
+			} else if ($this.text() === 'Offline') {
 				$('.box').show();
 				$('.status-Online').parent().hide();
-			}else if ($this.text() === 'All') {
+			} else if ($this.text() === 'All') {
 				$('.box').show();
 			}
 		});
@@ -31,13 +29,15 @@ const app = {
 			if (streamer === '') return;
 
 			this.addStreamer(streamer);
-			this.getData(streamer);
+			this.init();
 		});
 
 		$('.wrapper').on('click','a button', function(e) {
 			e.preventDefault();
+
 			const streamer = $(this).prev().text().toLowerCase();
 			const index = app.streamers.indexOf(streamer);
+
 			app.streamers.splice(index, 1);
 			app.init();
 		});
@@ -47,45 +47,65 @@ const app = {
 		this.streamers.push(streamer);
 	},
 
-	getData(streamer) {
-		this.online = true;
-
-		$.ajax({
-			url: `https://wind-bow.gomix.me/twitch-api/streams/${streamer}`,
-			dataType: 'jsonp',
-			success: data => {
-				if (data.stream === null) {
-					this.offlineInfo(streamer);
-				} else {
-					this.render({
-						status: 'Online',
-						name: data.stream.channel.display_name, 
-						game: data.stream.channel.game,
-						info: data.stream.channel.status,
-						logo: data.stream.channel.logo,
-						url: data.stream.channel.url,
-					});
-				}
-			}
+	ajax(options) {
+		return new Promise(function(resolve, reject) {
+			$.ajax({
+				url: options.url,
+				dataType: options.dataType
+			})
+			.done(resolve)
+			.fail(reject);
 		});
 	},
 
-	offlineInfo(streamer) {
-		$.ajax({
-			url: `https://wind-bow.gomix.me/twitch-api/channels/${streamer}`,
-			dataType: 'jsonp',
-			success: data => {
-				this.online = false;
+	getData() {
+		const streamersData = this.streamers.map(streamer => {
+			return this.ajax({
+				url: `https://wind-bow.gomix.me/twitch-api/streams/${streamer}`,
+				dataType: 'jsonp'
+			})
+			.then(data => {
+				//check if streamer is online. If its not online make a call to take offline data
+				if (data.stream === null) {
+					return this.ajax({
+						url: `https://wind-bow.gomix.me/twitch-api/channels/${streamer}`,
+						dataType: 'jsonp'
+					});
+				} else {
+					return this.ajax({
+						url: `https://wind-bow.gomix.me/twitch-api/streams/${streamer}`,
+						dataType: 'jsonp'
+					});
+				}
+			});
+		});
 
-				this.render({
-					status: 'Offline',
-					name: data.display_name,
-					logo: data.logo,
-					url: data.url,
-					error: data.status,
-					streamer: streamer
-				});
-			}
+		Promise.all(streamersData).then(responses => {
+			responses.forEach((data, index) => {
+				if (data.stream) {
+					this.online = true;
+					//render function renders the data from the request creates and renders data into the page
+					this.render({
+						status: 'Online',
+						name: data.stream.channel.display_name,
+						game: data.stream.channel.game,
+						info: data.stream.channel.status,
+						logo: data.stream.channel.logo,
+						url: data.stream.channel.url
+					});
+				} else {
+					this.online = false;
+
+					this.render({
+						status: 'Offline',
+						name: data.display_name,
+						logo: data.logo,
+						url: data.url,
+						error: data.status,
+						streamer: this.streamers[index]
+					});
+				}
+			});
 		});
 	},
 
