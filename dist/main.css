@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css?family=Rubik:300,400,700");
+body {
+  height: 100%;
+  font-family: 'Rubik', sans-serif;
+  background: #0c0511; }
+
+.border {
+  width: 400px;
+  max-width: 100%;
+  border: 0;
+  height: 1px;
+  background-image: -webkit-gradient(linear, right top, left top, from(rgba(169, 107, 214, 0.2)), color-stop(#a96bd6), to(rgba(169, 107, 214, 0.2)));
+  background-image: linear-gradient(to left, rgba(169, 107, 214, 0.2), #a96bd6, rgba(169, 107, 214, 0.2)); }
+
+a {
+  text-decoration: none; }
+
+header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 30px 50px; }
+  header .header-title {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 3px; }
+  header .main-nav a {
+    color: #fff;
+    text-transform: uppercase;
+    margin-left: 20px;
+    -webkit-transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out; }
+    header .main-nav a:nth-child(1) {
+      margin: 0; }
+    header .main-nav a:hover {
+      color: #b465ed; }
+  header form {
+    -ms-flex-preferred-size: 250px;
+        flex-basis: 250px; }
+    header form input[type="text"] {
+      width: 100%;
+      background: rgba(169, 107, 214, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 5px;
+      color: white;
+      -webkit-transition: -webkit-box-shadow 0.15s ease-in-out;
+      transition: -webkit-box-shadow 0.15s ease-in-out;
+      transition: box-shadow 0.15s ease-in-out;
+      transition: box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out; }
+      header form input[type="text"]::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px; }
+      header form input[type="text"]:-ms-input-placeholder {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px; }
+      header form input[type="text"]::placeholder {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px; }
+
+.container {
+  padding: 50px 0; }
+  .container .wrapper {
+    width: 1000px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+    @media (max-width: 980px) {
+      .container .wrapper {
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center; } }
+    .container .wrapper .box {
+      width: 300px;
+      height: 250px;
+      -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+      margin: 10px;
+      position: relative;
+      -webkit-transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
+      opacity: 0.5;
+      cursor: pointer;
+      position: relative; }
+      .container .wrapper .box:hover {
+        -webkit-transform: scale(1.1);
+                transform: scale(1.1);
+        opacity: 1; }
+      .container .wrapper .box:last-of-type {
+        -ms-flex-item-align: start;
+            align-self: flex-start; }
+      .container .wrapper .box .status-Online, .container .wrapper .box .status-Offline {
+        position: absolute;
+        bottom: 10px;
+        background: #a96bd6;
+        border-radius: 0 2px 2px 0;
+        color: #0c0511;
+        padding: 3px 10px; }
+        .container .wrapper .box .status-Online:before, .container .wrapper .box .status-Offline:before {
+          position: absolute;
+          top: 50%;
+          left: 2px;
+          content: '';
+          display: block;
+          width: 7px;
+          height: 7px;
+          margin-top: -3.5px;
+          border-radius: 50px;
+          background: green; }
+      .container .wrapper .box .status-Offline:before {
+        background: #0c0511; }
+      .container .wrapper .box .name, .container .wrapper .box .game, .container .wrapper .box .info {
+        border-radius: 0px 3px 3px 0;
+        display: inline-block;
+        color: #fff;
+        padding: 8px;
+        background: rgba(12, 12, 12, 0.5); }
+      .container .wrapper .box .game {
+        border-radius: 3px; }
+      .container .wrapper .box .info {
+        font-size: 14px; }
+      .container .wrapper .box img {
+        max-width: 100%;
+        height: auto; }
+      .container .wrapper .box .delete-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #0c0c0c;
+        border: none;
+        font-size: 18px;
+        color: #d82929; }
+
+@media (max-width: 630px) {
+  header {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
+    header form {
+      -ms-flex-preferred-size: auto;
+          flex-basis: auto;
+      margin-top: 20px; }
+    header .header-title {
+      margin-right: 0; }
+  .wrapper {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; } }
