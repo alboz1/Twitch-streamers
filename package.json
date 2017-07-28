@@ -4,13 +4,14 @@
   "description": "Collect your favourite twitch streamers in one place",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Erd Vuca",
   "license": "ISC",
   "devDependencies": {
+    "babel-preset-env": "^1.6.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
+    "gulp-babel": "^6.1.2",
     "gulp-sass": "^3.1.0",
     "gulp-webserver": "^0.9.1"
   }
