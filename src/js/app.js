@@ -1,5 +1,5 @@
 const app = {
-	streamers: ['freecodecamp', 'tsm_dyrus', 'tsm_bjergsen', 'donthedeveloper', 'summit1g'],
+	streamers: ['hsdogdog', 'idevelopthings','grossie_gore', 'p4wnyhof', 'fullstopcoding', 'noopkat', 'disguisedtoasths', 'freecodecamp', 'tsm_dyrus', 'tsm_bjergsen', 'donthedeveloper', 'summit1g'],
 	online: false,
 
 	init() {
@@ -121,7 +121,7 @@ const app = {
 						${this.catchError(props.error) ? 'Account doesn\'t exist' : props.status}
 					</span>
 					<p class="name">${this.catchError(props.error) ? props.streamer : props.name}</p>
-					${this.catchError(props.error) || !this.online ? '' : `<p class="game">${props.game}</p>`}
+					${this.catchError(props.error) || !this.online ? '' : `<p class="game">Playing <span>${props.game}</span></p>`}
 					${this.catchError(props.error) || !this.online ? '' : `<p class="info">${props.info}</p>`}
 					<button class="delete-btn">&times;</button>
 				</div>

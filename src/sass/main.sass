@@ -68,13 +68,11 @@ header
 			box-sizing: border-box
 			margin: 10px
 			position: relative
-			transition: all 0.2s ease-in-out
-			opacity: 0.5
+			transition: transform 0.2s ease-in-out
 			cursor: pointer
 			position: relative
 			&:hover
 				transform: scale(1.1)
-				opacity: 1
 			&:last-of-type
 				align-self: flex-start
 			.status-Online
@@ -108,6 +106,8 @@ header
 			.game
 				@extend .name
 				border-radius: 3px
+				span
+					color: $light
 			.info
 				@extend .name
 				font-size: 14px
@@ -129,6 +129,7 @@ header
 		flex-direction: column
 		justify-content: center
 		form
+			width: 100%
 			flex-basis: auto
 			margin-top: 20px
 		.header-title
