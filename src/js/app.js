@@ -47,32 +47,21 @@ const app = {
 		this.streamers.push(streamer);
 	},
 
-	ajax(options) {
-		return new Promise(function(resolve, reject) {
-			$.ajax({
-				url: options.url,
-				dataType: options.dataType
-			})
-			.done(resolve)
-			.fail(reject);
-		});
-	},
-
 	getData() {
 		const streamersData = this.streamers.map(streamer => {
-			return this.ajax({
+			return $.ajax({
 				url: `https://wind-bow.gomix.me/twitch-api/streams/${streamer}`,
 				dataType: 'jsonp'
 			})
 			.then(data => {
 				//check if streamer is online. If its not online make a call to take offline data
 				if (data.stream === null) {
-					return this.ajax({
+					return $.ajax({
 						url: `https://wind-bow.gomix.me/twitch-api/channels/${streamer}`,
 						dataType: 'jsonp'
 					});
 				} else {
-					return this.ajax({
+					return $.ajax({
 						url: `https://wind-bow.gomix.me/twitch-api/streams/${streamer}`,
 						dataType: 'jsonp'
 					});
@@ -80,33 +69,40 @@ const app = {
 			});
 		});
 
-		Promise.all(streamersData).then(responses => {
-			responses.forEach((data, index) => {
-				if (data.stream) {
-					this.online = true;
-					//render function renders the data from the request creates and renders data into the page
-					this.render({
-						status: 'Online',
-						name: data.stream.channel.display_name,
-						game: data.stream.channel.game,
-						info: data.stream.channel.status,
-						logo: data.stream.channel.logo,
-						url: data.stream.channel.url
+		$.when(...streamersData)
+			.then((...responses) => {
+				responses
+					.map(response => response[0])
+					.forEach((data,index) => {
+						this.getInfo(data,index);
 					});
-				} else {
-					this.online = false;
-
-					this.render({
-						status: 'Offline',
-						name: data.display_name,
-						logo: data.logo,
-						url: data.url,
-						error: data.status,
-						streamer: this.streamers[index]
-					});
-				}
 			});
-		});
+	},
+
+	getInfo(data, index) {
+		if (data.stream) {
+			this.online = true;
+			//render function renders the data from the request creates and renders data into the page
+			this.render({
+				status: 'Online',
+				name: data.stream.channel.display_name,
+				game: data.stream.channel.game,
+				info: data.stream.channel.status,
+				logo: data.stream.channel.logo,
+				url: data.stream.channel.url
+			});
+		} else {
+			this.online = false;
+
+			this.render({
+				status: 'Offline',
+				name: data.display_name,
+				logo: data.logo,
+				url: data.url,
+				error: data.status,
+				streamer: this.streamers[index]
+			});
+		}
 	},
 
 	catchError(error) {

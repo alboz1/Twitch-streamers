@@ -1,8 +1,11 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
+const cleanCSS = require('gulp-clean-css');
 const server = require('gulp-webserver');
 const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
 
 function handleError(err) {
   console.log(err);
@@ -20,8 +23,11 @@ gulp.task('server', () => {
 
 gulp.task('babel', () => {
     return gulp.src('src/js/*.js')
-        .pipe(babel())
-        .on('error', handleError)
+        .pipe(sourcemaps.init())
+            .pipe(babel())
+            .on('error', handleError)
+        .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist'));
 });
 
@@ -31,6 +37,7 @@ gulp.task('sass', () => {
           .pipe(autoprefixer({
               browsers: ['last 2 versions']
           }))
+          .pipe(cleanCSS())
           .pipe(gulp.dest('dist'));
 });
 
